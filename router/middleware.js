@@ -27,5 +27,5 @@ exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
         return next();
     }
-    return res.redirect('https://vue.roen.pe.kr')
+    return res.redirect('https://library.roen.pe.kr')
   };
