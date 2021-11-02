@@ -19,7 +19,7 @@ router.get('/google',isNotLoggedIn,passport.authenticate('google',{ scope: ['pro
 router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/auth/failed' }),
   function(req, res) {
-    res.redirect('http://library.roen.pe.kr')
+    res.redirect('https://library.roen.pe.kr')
   });
 
 // kakao 로그인
@@ -27,7 +27,7 @@ router.get('/kakao',isNitLoggedReDirect,passport.authenticate('kakao', {failureR
 
 router.get('/kakao/oauth',isNitLoggedReDirect,passport.authenticate('kakao', {failureRedirect: 'auth/failed',}),function(req, res) {
         // Successful authentication, redirect home.
-        res.redirect('http://library.roen.pe.kr')
+        res.redirect('https://library.roen.pe.kr')
       });
 
 // 회원 가입
