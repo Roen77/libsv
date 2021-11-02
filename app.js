@@ -41,7 +41,7 @@ if (prod) {
   app.use(hpp());
   // cors 에러 방지
 app.use(cors({
-  origin:'https://vue.roen.pe.kr',
+  origin:'https://library.roen.pe.kr',
     credentials: true,
 }));
 } else {
