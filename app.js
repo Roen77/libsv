@@ -57,7 +57,6 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 
-// app.set('trust proxy', true);
 app.set('trust proxy', 1)
 app.use(cookie(process.env.COOKIE_KEY));
 const sessionOption = {
