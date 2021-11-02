@@ -66,7 +66,7 @@ const sessionOption = {
   secret: process.env.COOKIE_KEY,
   cookie: {
     httpOnly: true,
-    secure: false,
+    secure: true,
     domain: prod && '.roen.pe.kr',
   },
 };
