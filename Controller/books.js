@@ -1,4 +1,4 @@
-const request = require('request');
+const needle = require('needle');
 const db = require('../models');
 const { Op } = require("sequelize");
 require('dotenv').config();
@@ -23,32 +23,22 @@ module.exports={
     // 카카오 검색
     kakaosearch(req,res){
         //통합 검색
-        const api_url='https://dapi.kakao.com/v3/search/book?query=' + encodeURI(req.query.query);
-
-        let option={
-            size:req.query.size,
-            page:req.query.page
-        };
-
-        let options={
-            url:api_url,
-            qs:option,
-            headers: {"Authorization":` KakaoAK ${process.env.KAKAO_APIKEY}`}
-        };
-        //타이틀 검색,isbn검색,저자 검색,출판사 검색
+        let api_url='https://dapi.kakao.com/v3/search/book?query=' + encodeURI(req.query.query)+`&size=${req.query.size}&page=${req.query.page}`
         if(req.query.target){
-            option={...option,target:encodeURI(req.query.target)}
+            api_url+=`&target=${req.query.target}`
         }
-
-        request.get(options,function(error,response,body){
-            if(!error && response.statusCode == 200){
-                res.writeHead(200, {'Content-Type': 'text/json;charset=utf-8'});
-               res.end(body);
+        const options={
+            headers: {"Authorization":` KakaoAK ${process.env.KAKAO_APIKEY}`,'Content-Type': 'text/json;charset=utf-8'}
+        }
+        needle.get(api_url,options, function (error, response) {
+            if (!error && response.statusCode == 200){
+               return res.json(response.body);
             }else{
-                res.status(response.statusCode).end();
-                console.log('error = ' + response.statusCode);
+               return res.json({
+                    msg:'책이 존재하지 않습니다.'
+                })
             }
-        })
+        });
     },
     // 책  추가
     async addBook(req,res,next){
@@ -60,7 +50,6 @@ module.exports={
         }})
         //  Amazon S3 버킷을 이용해 이미지를 저장한 후 req.file이 있다면, location를 저장하고,없다면 req.body.thumbnail를 저장한다.
         // let thumbnail=req.file?req.file.location:req.body.thumbnail
-        console.log('서버에서 섬네일 학인',thumbnail)
         //  책제목과 isbn,책저자가 같은 책이 없다면 새로운 책을 추가한다.
         if(!book){
             const newBook = await db.Book.create({
@@ -121,7 +110,6 @@ module.exports={
             // 전체 책의 갯수
            const totalCount=await db.Book.count({where:{UserId:req.user.id}})
             // 책 데이터, 전체 책의 갯수, 페이지,전체 페이지 정보를 json 객체 형식으로 보여준다.
-            console.log(page,offset,'서버에서 확인좀')
           return res.json({
                success:true,
                books,
@@ -162,9 +150,6 @@ module.exports={
         } catch (error) {
             console.error(error);
             return next(error);
-            // return res.status(500).json({
-            //     msg:'요청해주신 책은 존재하지 않습니다.'
-            // })
         }
     },
     // 책 삭제하기
@@ -278,11 +263,10 @@ module.exports={
                 const searchList=["책제목","저자"]
                const target= decodeURIComponentSafe(req.query.target)
                if (req.query.search)
-                console.log('서버에서 확인','search타입:',typeof req.query.search,req.query.search,req.query.target,'새로운 타겟:',target)
-                if (!searchList.includes(req.query.search))                 return res.status(400).json({
+
+                if (!searchList.includes(req.query.search)) return res.status(400).json({
                     msg:'요청해주신 책은 존재하지 않습니다.'
                 })
-                // const target=req.query.target.replace(/%/gi, "\\%");
                 switch (req.query.search) {
                     // 책 제목으로 검색
                     case "책제목":
@@ -346,7 +330,6 @@ module.exports={
             totalPage:Math.ceil(totalCount/limit)?Math.ceil(totalCount/limit):0
         })
         } catch (error) {
-            console.log(req.query.target,'오류좀..')
             console.error(error);
             return res.status(500).json({
                 msg:'요청해주신 책들을 불러오지 못했습니다.',
@@ -381,9 +364,6 @@ module.exports={
         } catch (error) {
              console.error(error);
              return next(error);
-            // return res.status(500).json({
-            //     msg:'요청해주신 책은 존재하지 않습니다.'
-            // })
         }
     },
     // 다른사람 책 좋아요

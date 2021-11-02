@@ -25,8 +25,6 @@ upload=multer({
     limits: { fileSize: 20 * 1024 * 1024 },
 }),
 
-
-
 module.exports={
     upload,
     async uploadImage(req,res,next){

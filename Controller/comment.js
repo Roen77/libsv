@@ -12,8 +12,6 @@ module.exports={
                     msg:'요청해주신 책이 존재하지 않습니다.'
                 })
             }
-            // const {comments,rating}=req.body
-            // const {comments,rating}=req.body
             const newComment= await db.Comment.create({
                 comments:req.body.comments,
                 rating:req.body.rating,
@@ -55,7 +53,6 @@ module.exports={
                     [Op.lt]: parseInt(req.query.lastId, 10), // less than
                   }}]}
             }
-                console.log(where,'조건절 확인좀')
                 const comments = await db.Comment.findAll({
                     where,
                     include:[{

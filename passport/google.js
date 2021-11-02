@@ -4,7 +4,6 @@ require('dotenv').config();
 
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-
 module.exports=()=>{
   passport.use(new GoogleStrategy({
     clientID:process.env.GOOGLE_CLIENT_ID,
@@ -22,16 +21,13 @@ module.exports=()=>{
               username:profile.displayName,
               googleId:profile.id,
               provider:profile.provider,
-    
+
           })
         return  done(null,newUser)
-  
+
         }else{
            return done(null,exUser)
         }
-      // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      //   return done(err, user);
-      // });
       } catch (error) {
           console.error(error);
           return done(error);

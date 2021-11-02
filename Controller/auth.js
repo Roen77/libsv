@@ -6,7 +6,6 @@ const bcrypt=require('bcrypt');
 const loginConfirm=(req,res,next)=>{
     passport.authenticate('local', async (err, user, info) => {
         if (err) {
-          console.error(err);
           return next(err);
         }
         if (info) {
@@ -17,7 +16,6 @@ const loginConfirm=(req,res,next)=>{
         }
         return req.login(user, async (err) => {
           if (err) {
-            console.error(err);
             return next(err);
           }
           // 사용자 정보
@@ -46,7 +44,6 @@ module.exports={
             await db.User.create({email,password:hash,username});
             loginConfirm(req,res,next);
         } catch (error) {
-            console.error(error);
             return next(error);
         }
     },
@@ -55,7 +52,6 @@ module.exports={
         try {
             loginConfirm(req,res,next);
         } catch (error) {
-            console.error(error);
            return next(error);
         }
        },
@@ -63,7 +59,7 @@ module.exports={
     logout(req,res,next){
         if(req.isAuthenticated()){
          req.logout();
-         req.session.destroy(); 
+         req.session.destroy();
          return res.status(200).send('로그아웃 되었습니다.')
         }
      },
@@ -88,14 +84,13 @@ module.exports={
         }
         // 변경한 사용자의 정보를 찾는다.
         const newUser=await db.User.findOne({where:{id:req.user.id},attributes:['id','email','username','thumbnail']})
-         
+
       return  res.json({
         success:true,
         msg:'프로필 수정 완료되었습니다.',
         user:newUser
       })
       } catch (error) {
-        console.error(error);
        return next(error);
       }
      },
@@ -112,7 +107,6 @@ module.exports={
           msg:'비밀번호 수정 완료되었습니다.',
         })
       } catch (error) {
-        console.error(error);
         return next(error);
       }
 

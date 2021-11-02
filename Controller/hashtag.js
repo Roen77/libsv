@@ -36,7 +36,6 @@ module.exports={
 
             res.json({
                 msg:'해시태그 추가 완료되었습니다.',
-                // hashtagList:newhashtagList,
                 hashtagList:hashtagList.map((tag)=>tag[0])
             })
         } catch (error) {
@@ -80,7 +79,6 @@ module.exports={
             }
             let limit=12;
             const offset=page?page*limit:0;
-            console.log(typeof req.query.page,req.query.page,'알아서인코딩??')
             const books= await db.Book.findAll({
                limit,
                offset,
@@ -121,7 +119,6 @@ module.exports={
                     as:'Hashtags',
                 }]
             })
-            console.log('토탈확인좀',totalCount)
            res.json({
                success:true,
                books,
@@ -131,7 +128,6 @@ module.exports={
            })
            return
         } catch (error) {
-            console.log('eeeeee??????????????????',req.query.name);
             return res.status(500).json({
                 success:false,
                 msg:'요청해주신 책이 존재하지 않습니다.',
