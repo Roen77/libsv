@@ -25,7 +25,7 @@ const app =express();
 
 
 // db 연결
-sequelize.sync()
+sequelize.sync({fource:true})
 .then(()=>{
     console.log('db 연결 성공')
 })
