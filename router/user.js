@@ -14,19 +14,18 @@ router.get('/',(req,res)=>{
 });
 
 // 구글 로그인
-router.get('/google',isNotLoggedIn,passport.authenticate('google',{ scope: ['profile','email'], accessType:'offline',prompt:'consent' }));
+router.get('/google',isNotLoggedIn,passport.authenticate('google',{ scope: ['profile','email']}));
 
 router.get('/google/callback',
-  passport.authenticate('google', { failureRedirect: '/auth/failed' }),
+  passport.authenticate('google', { failureRedirect: 'https://library.roen.pe.kr' }),
   function(req, res) {
     res.redirect('https://library.roen.pe.kr')
   });
 
 // kakao 로그인
-router.get('/kakao',isNitLoggedReDirect,passport.authenticate('kakao', {failureRedirect: 'auth/failed'}));
+router.get('/kakao',isNitLoggedReDirect,passport.authenticate('kakao', {failureRedirect: 'https://library.roen.pe.kr'}));
 
-router.get('/kakao/oauth',isNitLoggedReDirect,passport.authenticate('kakao', {failureRedirect: 'auth/failed',}),function(req, res) {
-        // Successful authentication, redirect home.
+router.get('/kakao/oauth',isNitLoggedReDirect,passport.authenticate('kakao', {failureRedirect: 'https://library.roen.pe.kr',}),function(req, res) {
         res.redirect('https://library.roen.pe.kr')
       });
 

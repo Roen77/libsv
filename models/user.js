@@ -17,7 +17,7 @@ module.exports = class User extends Sequelize.Model {
         allowNull: false,
       },
       googleId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING(750),
         allowNull: true,
       },
       kakaoId: {
