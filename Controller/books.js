@@ -206,7 +206,7 @@ module.exports={
                     }]})
             return res.json({
                 success:true,
-                msg:'성공적으로 수정완료되었습니다.',
+                msg:'성공적으로 수정 완료되었습니다.',
                 book,
             })
         } catch (error) {
